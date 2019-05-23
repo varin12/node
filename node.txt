@@ -1,0 +1,77 @@
+const express = require('express')
+const app = express();
+const bodyParser = require('body-parser')
+const mysql = require('mysql');
+var fs = require('fs');
+
+var port = process.env.PORT || 3100;
+var con1 = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "pse8m3",
+    database: "test"
+});
+
+/* <html>
+    <body>
+
+        <h1 id="id1">My Heading 1</h1>
+
+        <button type="button"
+            onclick="document.getElementById('id1').style.color = 'red'">
+            Click Me!</button>
+
+    </body>
+</html> */
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.get('/getAll', (req, res) => {
+    // var sql = "SELECT * FROM `user`";
+    // con1.query(sql, function (err, rows) {
+    //     if (err) throw err;
+    //     res.json(rows);
+});
+
+
+
+app.get('/getid/:id', (req, res) => {
+    var sql = "SELECT * FROM `user` where id =" + req.params.id;
+    con1.query(sql, function (err, rows) {
+        if (err) throw err;
+        res.json(rows);
+    });
+})
+
+app.post('/addData', (req, res) => {
+    let name = req.body.name;
+    let age = req.body.age;
+    var sql = 'INSERT INTO `user`(`name`, `age`) VALUES \
+	("'+ name + '","' + age + '")';
+    con1.query(sql, function (err, rows) {
+        if (err) throw err;
+        res.send('sucsess');
+    })
+});
+
+app.put('/updateData/:id', (req, res) => {
+    let name = req.body.name;
+    let age = req.body.age;
+    var sql = "UPDATE `user` SET `name`=?,`age`=? WHERE id=?";
+    con1.
+f (err) throw err;
+        res.send('sucsess');
+    })
+})
+
+app.delete('/deleteData/:id', (req, res) => {
+    var sql = "DELETE FROM `user` WHERE id='" + req.params.id + "'";
+    con1.query(sql, function (err, rows) {
+        if (err) throw err;
+        res.send('sucsess');
+    })
+})
+
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
